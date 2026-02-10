@@ -1,0 +1,162 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: #0f0f14;
+  color: #e4e4e7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 720px;
+}
+
+.face-view {
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 4/3;
+  background: #1a1a24;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #27272a;
+}
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.video-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.video-wrapper video.speaking {
+  box-shadow: 0 0 0 3px #22c55e;
+}
+
+.speaking-indicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(34, 197, 94, 0.9);
+  color: #0f0f14;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.face-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #71717a;
+  font-size: 0.9rem;
+}
+
+.audio-input button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #3b82f6;
+  color: white;
+  transition: background 0.2s;
+}
+
+.audio-input button:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.audio-input button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.audio-input button.recording {
+  background: #ef4444;
+}
+
+.audio-input button.recording:hover {
+  background: #dc2626;
+}
+
+.status {
+  font-size: 0.85rem;
+  color: #a1a1aa;
+}
+
+.transcript {
+  width: 100%;
+  max-height: 120px;
+  overflow-y: auto;
+  padding: 1rem;
+  background: #1a1a24;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.transcript .user {
+  color: #60a5fa;
+  margin-bottom: 0.5rem;
+}
+
+.transcript .assistant {
+  color: #34d399;
+}
+
+.transcript .streaming {
+  opacity: 0.8;
+}
+
+.ws-status {
+  font-size: 0.75rem;
+  color: #71717a;
+}
+
+.ws-status.connected {
+  color: #22c55e;
+}
+
+.ws-status.error {
+  color: #ef4444;
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.reconnect-btn {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #3b82f6;
+  color: white;
+}
