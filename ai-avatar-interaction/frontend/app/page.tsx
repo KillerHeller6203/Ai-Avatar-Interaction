@@ -72,17 +72,33 @@ export default function Home() {
     };
   }, []);
 
-  const sendAudio = useCallback((base64: string) => {
-    const socket = wsRef.current;
-    if (socket?.readyState === WebSocket.OPEN) {
-      socket.send(
-        JSON.stringify({
-          type: "audio",
-          payload: base64,
-        })
-      );
-    }
-  }, []);
+  // const sendAudio = useCallback((base64: string) => {
+  //   const socket = wsRef.current;
+  //   if (socket?.readyState === WebSocket.OPEN) {
+  //     socket.send(
+  //       JSON.stringify({
+  //         type: "audio",
+  //         payload: base64,
+  //       })
+  //     );
+  //   }
+  // }, []);
+    const sendAudio = useCallback((base64: string) => {
+          const socket = wsRef.current;
+          if (!socket || socket.readyState !== WebSocket.OPEN) return;
+
+          if (base64 === "__AUDIO_END__") {
+            socket.send(JSON.stringify({ type: "audio_end" }));
+          } else {
+            socket.send(
+              JSON.stringify({
+                type: "audio",
+                payload: base64,
+              })
+            );
+          }
+        }, []);
+
 
   return (
     <main className="main">

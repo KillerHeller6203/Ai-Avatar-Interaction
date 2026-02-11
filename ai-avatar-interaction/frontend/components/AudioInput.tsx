@@ -32,18 +32,34 @@ export default function AudioInput({ onAudioChunk, disabled }: AudioInputProps) 
         }
       };
 
+      // recorder.onstop = async () => {
+      //   const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+      //   const buffer = await blob.arrayBuffer();
+      //   // @ts-ignore
+      //   const base64 = btoa(
+      //     String.fromCharCode(...new Uint8Array(buffer))
+      //   );
+      //   onAudioChunk(base64);
+      //   chunksRef.current = [];
+      // };
       recorder.onstop = async () => {
         const blob = new Blob(chunksRef.current, { type: "audio/webm" });
-        const buffer = await blob.arrayBuffer();
-        // @ts-ignore
-        const base64 = btoa(
-          String.fromCharCode(...new Uint8Array(buffer))
-        );
-        onAudioChunk(base64);
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64 = (reader.result as string).split(",")[1];
+          if (!base64) return;
+
+          onAudioChunk(base64);
+          onAudioChunk("__AUDIO_END__");
+        };
+        reader.readAsDataURL(blob);
         chunksRef.current = [];
       };
 
-      recorder.start(); // ✅ NO TIMESLICE
+
+
+      recorder.start();
       mediaRecorderRef.current = recorder;
       setRecording(true);
     } catch (err) {

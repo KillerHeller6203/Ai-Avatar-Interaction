@@ -12,7 +12,6 @@ from stt import transcribe_audio
 from llm import stream_completion
 from tts import stream_tts
 
-
 async def handle_websocket(ws: WebSocket) -> None:
     await ws.accept()
     session = Session(session_id=str(uuid.uuid4()))
@@ -25,12 +24,20 @@ async def handle_websocket(ws: WebSocket) -> None:
             msg_type = data.get("type")
 
             if msg_type == "audio":
-                b64 = data.get("payload")
-                if not b64:
+                payload = data.get("payload")
+                if not payload:
                     continue
 
-                audio_bytes = base64.b64decode(b64)
-                await process_audio_to_voice(ws, session, audio_bytes)
+                session.append_audio(base64.b64decode(payload))
+
+            elif msg_type == "audio_end":
+                full_audio = session.consume_audio()
+
+                if not full_audio:
+                    await ws.send_json({"type": "status", "payload": "ready"})
+                    continue
+
+                await process_audio_to_voice(ws, session, full_audio)
 
             elif msg_type == "ping":
                 await ws.send_json({"type": "pong"})
@@ -40,6 +47,7 @@ async def handle_websocket(ws: WebSocket) -> None:
             await ws.send_json({"type": "error", "payload": str(e)})
         except Exception:
             pass
+
 
 
 async def process_audio_to_voice(
