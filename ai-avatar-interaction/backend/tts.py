@@ -23,35 +23,36 @@ async def stream_tts(text: str) -> AsyncGenerator[bytes, None]:
             yield chunk
 
 
+import uuid
+
 async def _tts_edge(text: str) -> AsyncGenerator[bytes, None]:
     """
-    Edge TTS (free, local). Generates WAV audio.
+    Edge TTS (free, bulletproof tempfile). Generates complete MP3 audio without file lock errors.
     """
+    path = os.path.join(tempfile.gettempdir(), f"edge_tts_{uuid.uuid4().hex}.mp3")
     try:
         import edge_tts
-
-        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
-            path = f.name
 
         communicate = edge_tts.Communicate(
             text=text,
             voice="en-US-JennyNeural",
         )
-
         await communicate.save(path)
 
-        with open(path, "rb") as f:
-            data = f.read()
-
-        chunk_size = 4096
-        for i in range(0, len(data), chunk_size):
-            yield data[i : i + chunk_size]
-
-        os.unlink(path)
+        if os.path.exists(path):
+            with open(path, "rb") as f:
+                data = f.read()
+            if data:
+                yield data
 
     except Exception as e:
-        # On failure, return silence instead of crashing
-        return
+        print(f"[Edge TTS Exception]: {e}")
+    finally:
+        if os.path.exists(path):
+            try:
+                os.remove(path)
+            except Exception:
+                pass
 
 
 async def _tts_elevenlabs(text: str) -> AsyncGenerator[bytes, None]:

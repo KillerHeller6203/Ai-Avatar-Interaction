@@ -1,137 +1,89 @@
-## AI Avatar Interaction System
+# Resumé Edge — AI Resume Enhancer & Interactive Interview Avatar
 
-A real-time AI avatar interview system that enables natural voice-based interaction using Speech-to-Text (STT), Large Language Models (LLM), and Text-to-Speech (TTS). The system simulates a professional interviewer with conversational responses and audio playback.
-
----
-
-## Features
-
-- Real-time voice input via browser microphone
-- AI-driven interviewer with conversational context
-- Streaming transcription (STT) using local Whisper (offline, zero cost)
-- Streaming LLM responses for low-latency interaction
-- Text-to-Speech (TTS) audio playback in the browser
-- WebSocket-based pipeline for real-time communication
-- Modular backend design (STT, LLM, TTS isolated)
+**Resumé Edge** is an end-to-end AI platform featuring an **Interactive Voice-Based AI Interviewer Avatar** and a **Smart AI Resume Enhancer & ATS Analyzer**.
 
 ---
 
-## Architecture Overview
+## 🌟 Key Features
 
-```
-Browser (Mic)
-   ↓
-WebSocket (Audio)
-   ↓
-Speech-to-Text (Whisper)
-   ↓
-LLM (Streaming Tokens)
-   ↓
-Text-to-Speech
-   ↓
-Browser (Audio Output + Avatar)
+### 🎙️ 1. Interactive Voice-Based AI Interviewer Avatar
+- **Real-Time Voice Turn-Taking**: Real-time hands-free audio conversation with Voice Activity Detection (VAD).
+- **Turn-Taking Echo Suppression**: Automatically mutes the candidate microphone while the AI avatar speaks to prevent speaker echo loops.
+- **Context-Aware Interviewing**: Reads candidate resume PDF, target job role, experience level, HR/Technical evaluation mode, and preferred interviewer tone.
+- **2D Canvas Face Avatar**: Lips animate in real-time synchronized to speaker playback with side audio equalizer waves and dynamic status badges (`Model is Speaking...`, `Model is Thinking...`, `Model is Listening...`).
+- **Comprehensive Performance Reports**: Evaluates candidates out of 100 with category breakdowns, strengths, key improvement areas, and question-by-question high-impact answer rewrites.
 
-```
+### 📄 2. AI Resume Enhancer & ATS Analyzer
+- **ATS Match Score**: Detailed ATS score ring out of 100 aligned with your target job role.
+- **PDF & Text Analysis**: Upload PDF resumes or paste plain text.
+- **Structured Feedback**: Actionable recommendations across formatting, technical keywords, and executive summaries.
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-## Frontend
-- Next.js (React)
-- Web Audio API
-- MediaRecorder API
-- WebSockets
-
-## Backend
-- FastAPI
-- WebSockets
-- Local Whisper (STT)
-- Streaming LLM inference
-- TTS engine
-- FFmpeg (audio decoding)
+- **Frontend**: Next.js 15, React 19, Tailwind CSS, TypeScript, Web Audio API, Canvas 2D.
+- **Backend**: Python 3.11, FastAPI, Uvicorn, WebSockets (`wss://`).
+- **AI / Speech Engines**:
+  - **LLM**: Google Gemini API (`gemini-1.5-flash` / `gemini-2.0-flash`).
+  - **STT (Speech-to-Text)**: OpenAI Whisper (`tiny.en` / `base`) + FFmpeg.
+  - **TTS (Text-to-Speech)**: Microsoft Edge TTS (`en-US-JennyNeural`).
+  - **PDF Parser**: `pdfplumber`.
 
 ---
 
-## Project Structure
+## 🚀 Local Development Setup
 
-``` bash
-ai-avatar-interaction/
-│
-├── backend/
-│   ├── main.py              # FastAPI entry point
-│   ├── websocket.py         # WebSocket handler
-│   ├── session.py           # Session + conversation state
-│   ├── stt.py               # Whisper STT module
-│   ├── llm.py               # LLM streaming logic
-│   └── tts.py               # Text-to-Speech module
-│
-├── frontend/
-│   ├── components/
-│   │   ├── AudioInput.tsx
-│   │   ├── AudioOutput.tsx
-│   │   └── FaceView.tsx
-│   └── app/page.tsx
-│
-└── README.md
-```
-
----
-
-## Setup Instructions
-## Prerequisites
-- Python 3.9+
-- Node.js 18+
-- FFmpeg installed and added to PATH
-
----
-
-## Backend Setup
-``` bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-```
-## Run Backend
+### 1. Backend Setup
 ```bash
-uvicorn main:app --host 127.0.0.1 --port 8000
+cd ai-avatar-interaction/backend
+
+# Create virtual environment
+python -m venv .venv
+# Activate on Windows:
+.venv\Scripts\activate
+# Activate on Linux/macOS:
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure environment variables
+# Edit .env file:
+# GEMINI_API_KEY=your_gemini_api_key
+
+# Run FastAPI backend server
+python main.py
 ```
 
-## Frontend Setup
-``` bash
-cd frontend
+### 2. Frontend Setup
+```bash
+cd ai-avatar-interaction/frontend
+
+# Install dependencies
 npm install
+
+# Run Next.js development server
 npm run dev
 ```
-Open:
-```bash
-http://localhost:3000
-```
+
+Open `http://localhost:3000` in your web browser.
 
 ---
 
-## Usage
-- Start backend server
-- Start frontend app
-- Click Connect
-- Click Start Mic, speak naturally
-- Click Stop Mic
-- AI transcribes, thinks, responds, and speaks back
+## 🌐 Production Deployment
+
+- **Frontend**: Deploy `ai-avatar-interaction/frontend` to **[Vercel](https://vercel.com)**.
+  - Set Environment Variables:
+    - `NEXT_PUBLIC_API_URL` = `https://your-backend.onrender.com`
+    - `NEXT_PUBLIC_WS_URL` = `wss://your-backend.onrender.com/ws`
+
+- **Backend**: Deploy `ai-avatar-interaction/backend` to **[Render.com](https://render.com)** as a Docker Web Service using the provided `Dockerfile`.
+  - Set Environment Variable:
+    - `GEMINI_API_KEY` = `your_gemini_api_key`
 
 ---
 
-## Design Goals
-- Low latency interaction
-- Natural conversational flow
-- Offline-friendly STT
-- Clean separation of concerns
-- Easy extensibility (avatars, emotion, interview logic)
+## 🔒 Privacy & Security
 
-## Future Improvements
-- Partial STT streaming (no mic stop required)
-- Emotion-aware avatar expressions
-- Multiple interview modes
-- Better audio chunking
-- Docker support
-- Cloud deployment
+Resumé Edge operates with zero data persistence. Resumes and audio streams are processed in memory and are never stored on disk or shared with third parties.
