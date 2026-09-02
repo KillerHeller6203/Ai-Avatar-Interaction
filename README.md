@@ -36,7 +36,7 @@
 
 ### 1. Backend Setup
 ```bash
-cd ai-avatar-interaction/backend
+cd backend
 
 # Create virtual environment
 python -m venv .venv
@@ -48,9 +48,9 @@ source .venv/bin/activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Configure environment variables
-# Edit .env file:
-# GEMINI_API_KEY=your_gemini_api_key
+# Configure environment variables (copy from .env.example)
+cp .env.example .env
+# Set GEMINI_API_KEY=your_gemini_api_key
 
 # Run FastAPI backend server
 python main.py
@@ -58,7 +58,7 @@ python main.py
 
 ### 2. Frontend Setup
 ```bash
-cd ai-avatar-interaction/frontend
+cd frontend
 
 # Install dependencies
 npm install
@@ -73,12 +73,12 @@ Open `http://localhost:3000` in your web browser.
 
 ## 🌐 Production Deployment
 
-- **Frontend**: Deploy `ai-avatar-interaction/frontend` to **[Vercel](https://vercel.com)**.
+- **Frontend**: Deploy `frontend` directory to **[Vercel](https://vercel.com)**.
   - Set Environment Variables:
     - `NEXT_PUBLIC_API_URL` = `https://your-backend.onrender.com`
     - `NEXT_PUBLIC_WS_URL` = `wss://your-backend.onrender.com/ws`
 
-- **Backend**: Deploy `ai-avatar-interaction/backend` to **[Render.com](https://render.com)** as a Docker Web Service using the provided `Dockerfile`.
+- **Backend**: Deploy `backend` directory to **[Render.com](https://render.com)** as a Docker Web Service using the provided `Dockerfile`.
   - Set Environment Variable:
     - `GEMINI_API_KEY` = `your_gemini_api_key`
 
