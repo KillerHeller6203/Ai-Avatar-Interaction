@@ -5,22 +5,17 @@ uvicorn[standard]>=0.27.0
 # Environment variables
 python-dotenv>=1.0.0
 
-# HTTP client (for Ollama)
+# HTTP client
 httpx>=0.27.0
-
-# Speech-to-Text (local Whisper)
-openai-whisper>=20231117
-torch>=2.0.0
-ffmpeg-python>=0.2.0
-imageio-ffmpeg>=0.4.9
 
 # Text-to-Speech (Edge TTS)
 edge-tts>=6.1.9
 
-# Resume Enhancer & PDF Parsing
+# Resume Enhancer & PDF Parsing & Gemini Multimodal STT/LLM
 pdfplumber>=0.11.0
 google-generativeai>=0.8.0
 python-multipart>=0.0.9
 
-# Optional: ElevenLabs (only if enabled)
-# elevenlabs>=0.2.27
+# Optional: Local Whisper STT (install locally if offline STT is desired)
+# openai-whisper>=20231117
+# torch>=2.0.0
